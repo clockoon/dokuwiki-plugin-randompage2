@@ -29,7 +29,7 @@ class action_plugin_randompage2 extends DokuWiki_Action_Plugin {
             if(!page_exists($page)) continue;
             if(isHiddenPage($page)) continue;
             if (auth_quickaclcheck($page)) {
-                send_redirect(wl($page, '', true, '&'));
+                send_redirect(wl($page, ['utm_source' => 'randompage'], true, '&'));
             }
         }
     }
