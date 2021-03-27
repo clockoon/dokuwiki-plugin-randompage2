@@ -12,6 +12,7 @@ class action_plugin_randompage2 extends DokuWiki_Action_Plugin {
 
     public function register(Doku_Event_Handler $controller) {
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'do_randompage');
+        $controller->register_hook('MENU_ITEMS_ASSEMBLY', 'AFTER', $this, 'addsvgbutton', array());
     }
 
     public function do_randompage(Doku_Event $event, $param) {
@@ -32,5 +33,23 @@ class action_plugin_randompage2 extends DokuWiki_Action_Plugin {
                 send_redirect(wl($page, '', true, '&'));
             }
         }
+    }
+
+    /**
+     * Add 'Random page' button to page tools, new SVG based mechanism
+     *
+     * @param Doku_Event $event
+     */
+    public function addsvgbutton(Doku_Event $event) {
+        global $INFO;
+        if($event->data['view'] != 'page') {
+            return;
+        }
+
+        if(!$INFO['exists']) {
+            return;
+        }
+
+        array_splice($event->data['items'], -1, 0, [new \dokuwiki\plugin\randompage2\MenuItem()]);
     }
 }
